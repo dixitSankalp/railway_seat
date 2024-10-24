@@ -1,0 +1,47 @@
+class TrainCoach:
+    def __init__(self):
+        self.seats = [
+            [f'{r+1}{chr(65 + s)}' for s in range(7)] for r in range(11)
+        ] + [['12A', '12B', '12C']]
+        self.booked_seats = set()
+    
+    def display_seats(self):
+        for row in self.seats:
+            print(' '.join([f"{seat}" if seat not in self.booked_seats else 'XX' for seat in row]))
+    
+    def check_availability(self, num_seats):
+        for i, row in enumerate(self.seats):
+            available_seats = [seat for seat in row if seat not in self.booked_seats]
+            if len(available_seats) >= num_seats:
+                return i, available_seats[:num_seats]
+        return None, []
+
+    def book_seats(self, num_seats):
+        row_index, available_seats = self.check_availability(num_seats)
+        if row_index is not None:
+            for seat in available_seats:
+                self.booked_seats.add(seat)
+            return available_seats
+        else:
+            # Handle case when seats are not available in one row
+            booked = []
+            for row in self.seats:
+                for seat in row:
+                    if len(booked) < num_seats and seat not in self.booked_seats:
+                        booked.append(seat)
+                        self.booked_seats.add(seat)
+            return booked
+
+    def reserve(self, num_seats):
+        if len(self.booked_seats) + num_seats > 80:
+            print("Not enough seats available!")
+            return
+        booked = self.book_seats(num_seats)
+        print(f"Seats booked: {', '.join(booked)}")
+        self.display_seats()
+
+# Example of usage
+train = TrainCoach()
+train.reserve(5)
+train.reserve(3)
+train.reserve(8)
