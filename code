@@ -40,7 +40,6 @@ class TrainCoach:
         print(f"Seats booked: {', '.join(booked)}")
         self.display_seats()
 
-# Example of usage
 train = TrainCoach()
 train.reserve(5)
 train.reserve(3)
